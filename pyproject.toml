@@ -13,7 +13,12 @@ sentencepiece = "^0.1.99"
 datasets = "^2.14.5"
 torch = "^2.0.1"
 soundfile = "^0.12.1"
+# For the blur function
+scikit-image = "^0.21.0"
 
+# MoviePy is kinda fucked with the resize
+# https://stackoverflow.com/questions/76616042/attributeerror-module-pil-image-has-no-attribute-antialias#comment135086262_76616129
+pillow = "9.5.0"
 
 [build-system]
 requires = ["poetry-core"]
