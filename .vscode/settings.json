@@ -1,7 +1,15 @@
 {
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
     },
     "python.formatting.provider": "none",
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.importFormat": "absolute",
+    "python.analysis.autoImportCompletions": true,
+    "isort.args":["--profile", "black"],
+    "black-formatter.args": ["--fast"]
 }
