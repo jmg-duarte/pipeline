@@ -1,9 +1,13 @@
 import textwrap
 from typing import Tuple
 
-from moviepy.editor import *
-from moviepy.video.fx.crop import crop
-from skimage.filters import gaussian
+from moviepy.editor import (
+    AudioFileClip,
+    ColorClip,
+    CompositeVideoClip,
+    TextClip,
+    VideoFileClip,
+)
 
 WHITE = (255, 255, 255)
 
@@ -50,18 +54,11 @@ class NewsParagraphClip(CompositeVideoClip):
 audio = AudioFileClip("data/output/speech.wav")
 
 clip = (
-    VideoFileClip("data/videos/newsread.mp4")
+    VideoFileClip("data/videos/processed/newsroom.mp4")
     .set_audio(None)
     .set_duration(audio.duration)
     .set_audio(audio)
 )
-
-
-def blur(frame):
-    return gaussian(frame.astype(float), sigma=6)
-
-
-clip = crop(clip, x1=240, width=608).resize((1080, 1920)).fl_image(blur)
 
 video = CompositeVideoClip(
     [
