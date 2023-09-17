@@ -12,7 +12,7 @@ model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
 vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan")
 
 inputs = processor(
-    text="Techtron Inc. saw a remarkable surge of thirty five percent in August twenty twenty, driven by strong demand for its innovative tech products and a successful product launch.",
+    text="In May, the Texas state House voted one hundred and twenty one to twenty three to impeach Attorney General Ken Paxton. He faced accusations of using his influence to benefit a real estate developer named Nate Paul. Paxton was acquitted after a Senate trial, which also dismissed four articles of impeachment. His defense argued the impeachment was politically motivated, targeting him by political opponents, including George P. Bush, who ran against him in two thousand and twenty two. Paxton's lawyer accused the Bush family of manufacturing the allegations.",
     return_tensors="pt",
 )
 
@@ -22,4 +22,4 @@ speaker_embeddings = torch.tensor(embeddings_dataset[7306]["xvector"]).unsqueeze
 
 speech = model.generate_speech(inputs["input_ids"], speaker_embeddings, vocoder=vocoder)
 
-sf.write("speech.wav", speech.numpy(), samplerate=16000)
+sf.write("data/output/speech.wav", speech.numpy(), samplerate=16000)
