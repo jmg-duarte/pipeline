@@ -1,38 +1,79 @@
 import textwrap
+from typing import Tuple
 
 from moviepy.editor import *
+from moviepy.video.fx.crop import crop
+from skimage.filters import gaussian
+
+WHITE = (255, 255, 255)
+
+
+class NewsParagraphClip(CompositeVideoClip):
+    _background_clip: ColorClip
+    _text_clip: TextClip
+
+    text: str
+    padding: int
+    text_width: int
+    background_color: Tuple[int, int, int]
+
+    def __init__(
+        self,
+        text: str,
+        *,
+        text_width: int = 50,
+        padding: int = 50,
+        background_color: Tuple[int, int, int] = WHITE
+    ) -> None:
+        self.text = text
+        self.text_width = text_width
+        self.padding = padding
+        self.background_color = background_color
+
+        self._text_clip = TextClip(
+            "\n".join(textwrap.wrap(self.text, self.text_width)),
+            font="Helvetica",
+            fontsize=40,
+            align="West",
+            color="black",
+        ).set_position("center")
+        self._background_clip = ColorClip(self._background_size, self.background_color)
+
+        CompositeVideoClip.__init__(self, [self._background_clip, self._text_clip])
+
+    @property
+    def _background_size(self) -> Tuple[int, int]:
+        w, h = self._text_clip.size
+        return (w + self.padding, h + self.padding)
+
 
 audio = AudioFileClip("data/output/speech.wav")
 
 clip = (
-    VideoFileClip("data/videos/IMG_2551.mov")
+    VideoFileClip("data/videos/newsread.mp4")
     .set_audio(None)
     .set_duration(audio.duration)
     .set_audio(audio)
 )
-text_clip = (
-    TextClip(
-        "\n".join(
-            textwrap.wrap(
-                "Techtron Inc. saw a remarkable surge of thirty five percent in August twenty twenty, driven by strong demand for its innovative tech products and a successful product launch."
-            )
-        ),
-        font="Helvetica",
-        fontsize=20,
-        color="black",
-        align="West",
-    )
-    .set_position("center")
-    .set_duration(audio.duration)
+
+
+def blur(frame):
+    return gaussian(frame.astype(float), sigma=6)
+
+
+clip = crop(clip, x1=240, width=608).resize((1080, 1920)).fl_image(blur)
+
+video = CompositeVideoClip(
+    [
+        clip,
+        NewsParagraphClip(
+            "In May, the Texas state House voted 121-23 to impeach Attorney General Ken Paxton. He faced accusations of using his influence to benefit a real estate developer named Nate Paul. Paxton was acquitted after a Senate trial, which also dismissed four articles of impeachment. His defense argued the impeachment was politically motivated, targeting him by political opponents, including George P. Bush, who ran against him in 2022. Paxton's lawyer accused the Bush family of manufacturing the allegations.",
+        )
+        .set_duration(clip.duration)
+        .set_position("center"),
+    ]
 )
 
-
-bg_clip = (
-    ColorClip((text_clip.size[0] + 50, text_clip.size[1] + 50), color=(255, 255, 255))
-    .set_position("center")
-    .set_duration(audio.duration)
+video.write_videofile(
+    "data/output/output.mp4",
 )
-video = CompositeVideoClip([clip, bg_clip, text_clip])
-
-
-video.write_videofile("data/output/output.mp4")
