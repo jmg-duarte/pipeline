@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "pipeline"
+version = "0.1.0"
+description = ""
+authors = ["José Duarte <duarte.gmj@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.11"
+moviepy = "^1.0.3"
+transformers = "^4.33.2"
+sentencepiece = "^0.1.99"
+datasets = "^2.14.5"
+torch = "^2.0.1"
+soundfile = "^0.12.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
