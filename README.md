@@ -27,6 +27,8 @@ To get started with Pipeline, you need to have [Poetry](https://python-poetry.or
 
 ## Usage
 
+<img src="./static/sample.png" alt="Image Description" width="20%" align="right">
+
 To use Pipeline, you'll need a ChatGPT API key from OpenAI. If you don't have one,
 sign up for an account on the [OpenAI website](https://www.openai.com/) and create an API key.
 
@@ -39,10 +41,7 @@ export OPENAI_API_KEY="your-api-key-here"
 It is split into several tools and the _current process is manual_.
 
 Inside the `video/` folder there is the main video creation script which given an audio file,
-some text and the background video, will composite them into a video that roughly looks as follows:
-
-<img src="./static/sample.png" alt="Image Description" height="300">
-
+some text and the background video, will composite them into a video that roughly looks as shown on the right.
 
 <!-- ## License
 
